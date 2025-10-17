@@ -1,5 +1,7 @@
 // selectors
 export const getAllPosts = state => state.posts;
+export const getPostById = (state, id) => state.posts.find(p => p.id === id);
+
 // actions
 const createActionName = actionName => `app/posts/${actionName}`;
 
