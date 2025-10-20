@@ -1,2 +1,10 @@
-const PostEdit = () => <h1>PostEdit</h1>;
+import EditPostForm from '../features/EditPostForm';
+
+const PostEdit = () => (
+  <>
+    <h1 className="mb-4">Edit post</h1>
+    <EditPostForm />
+  </>
+);
+
 export default PostEdit;
