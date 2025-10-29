@@ -38,7 +38,7 @@ const Post = () => {
 
       <p className="mb-1"><strong>Author:</strong> {post.author}</p>
       <p className="mb-4"><strong>Published:</strong> {post.publishedDate}</p>
-      <p>{post.content}</p>
+      <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {/* Modal potwierdzenia */}
       <Modal show={show} onHide={closeModal} centered>
