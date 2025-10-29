@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 /**
  * Uniwersalny formularz postu.
@@ -72,14 +75,13 @@ const PostForm = ({ action, actionText, ...props }) => {
 
       <Form.Group className="mb-3">
         <Form.Label>Main content</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={6}
+        <ReactQuill
+          theme="snow"
           value={content}
-          onChange={e => setContent(e.target.value)}
-          placeholder="Main content"
+          onChange={setContent}    // ReactQuill zwraca od razu HTML string
         />
       </Form.Group>
+
 
       <Button type="submit" variant="primary" disabled={!isValid}>
         {actionText}
