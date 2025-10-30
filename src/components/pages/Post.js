@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getPostById, removePost } from '../../redux/postsRedux';
 import { Button, Modal } from 'react-bootstrap';
 import { useState } from 'react';
+import dateToStr from '../../utils/dateToStr';
 
 const Post = () => {
   const { id } = useParams();
@@ -37,7 +38,9 @@ const Post = () => {
       </div>
 
       <p className="mb-1"><strong>Author:</strong> {post.author}</p>
-      <p className="mb-4"><strong>Published:</strong> {post.publishedDate}</p>
+      <p className="mb-4">
+        <strong>Published:</strong> {dateToStr(post.publishedDate)}
+      </p>
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {/* Modal potwierdzenia */}
