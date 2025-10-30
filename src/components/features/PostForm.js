@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 /**
  * Uniwersalny formularz postu.
@@ -15,14 +16,16 @@ const PostForm = ({ action, actionText, ...props }) => {
   // startowe wartości: z props lub pusty string
   const [title, setTitle] = useState(props.title || '');
   const [author, setAuthor] = useState(props.author || '');
-  const [publishedDate, setPublishedDate] = useState(props.publishedDate || '');
+  const [publishedDate, setPublishedDate] = useState(
+  props.publishedDate ? new Date(props.publishedDate) : null
+  );
   const [shortDescription, setShortDescription] = useState(props.shortDescription || '');
   const [content, setContent] = useState(props.content || '');
 
   const isValid =
     title.trim() &&
     author.trim() &&
-    publishedDate.trim() &&
+    publishedDate &&
     shortDescription.trim() &&
     content.trim();
 
@@ -55,10 +58,13 @@ const PostForm = ({ action, actionText, ...props }) => {
 
       <Form.Group className="mb-3">
         <Form.Label>Published</Form.Label>
-        <Form.Control
-          value={publishedDate}
-          onChange={e => setPublishedDate(e.target.value)}
-          placeholder="Enter published date"
+        <DatePicker
+          selected={publishedDate}
+          onChange={(date) => setPublishedDate(date)}
+          placeholderText="Select published date"
+          dateFormat="MM/dd/yyyy"
+          className="form-control"
+          isClearable
         />
       </Form.Group>
 
