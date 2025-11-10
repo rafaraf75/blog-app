@@ -6,6 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { getAllCategories } from '../../redux/categoriesRedux';
 
 const PostForm = ({ action, actionText, ...props }) => {
   // --- RHF: init
@@ -25,6 +27,11 @@ const PostForm = ({ action, actionText, ...props }) => {
     props.shortDescription || ''
   );
   const [content, setContent] = useState(props.content || '');
+  const [category, setCategory] = useState(props.category || '');
+
+  // pobierz kategorie z magazynu (tymczasem może wyświetlić tylko ostrzeżenie o nieużywanej zmiennej)
+  // eslint-disable-next-line no-unused-vars
+  const categories = useSelector(getAllCategories);
 
   // --- dodatkowe błędy (dla content & date)
   const [contentError, setContentError] = useState(false);
@@ -41,7 +48,7 @@ const PostForm = ({ action, actionText, ...props }) => {
     setDateError(isDateEmpty);
 
     if (!isContentEmpty && !isDateEmpty) {
-      action({ title, author, publishedDate, shortDescription, content });
+      action({ title, author, publishedDate, shortDescription, content, category });
     }
   };
 
@@ -107,6 +114,29 @@ const PostForm = ({ action, actionText, ...props }) => {
         )}
       </Form.Group>
 
+      {/* CATEGORY */}
+      <Form.Group className="mb-3">
+        <Form.Label>Category</Form.Label>
+        <Form.Select
+          {...register('category', { required: true })}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">-- select category --</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </Form.Select>
+
+        {errors.category && (
+          <small className="d-block form-text text-danger mt-2">
+            Category is required
+          </small>
+        )}
+      </Form.Group>
+
       {/* SHORT DESCRIPTION */}
       <Form.Group className="mb-3">
         <Form.Label>Short description</Form.Label>
@@ -154,9 +184,10 @@ PostForm.propTypes = {
   actionText: PropTypes.string.isRequired,
   title: PropTypes.string,
   author: PropTypes.string,
-  publishedDate: PropTypes.instanceOf(Date), // <-- zmiana!
+  publishedDate: PropTypes.instanceOf(Date),
   shortDescription: PropTypes.string,
   content: PropTypes.string,
+  category: PropTypes.string,
 };
 
 export default PostForm;
