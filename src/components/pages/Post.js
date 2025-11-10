@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPostById, removePost } from '../../redux/postsRedux';
+import { getAllCategories } from '../../redux/categoriesRedux';
 import { Button, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import dateToStr from '../../utils/dateToStr';
@@ -9,6 +10,12 @@ const Post = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const post = useSelector(state => getPostById(state, id));
+  const categories = useSelector(getAllCategories);
+
+  // znajdź nazwę kategorii dla tego posta
+  const categoryName = post
+    ? (categories.find(c => c.id === post.category)?.name || '—')
+    : '';
 
   // modal potwierdzenia
   const [show, setShow] = useState(false);
@@ -38,9 +45,10 @@ const Post = () => {
       </div>
 
       <p className="mb-1"><strong>Author:</strong> {post.author}</p>
-      <p className="mb-4">
+      <p className="mb-1">
         <strong>Published:</strong> {dateToStr(post.publishedDate)}
       </p>
+      <p className="mb-4"><strong>Category:</strong> {categoryName}</p>
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {/* Modal potwierdzenia */}
